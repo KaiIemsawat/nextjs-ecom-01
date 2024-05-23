@@ -5,11 +5,29 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
+import db from "@/db/db";
+import { formatCurrency, formatNumber } from "@/lib/formatters";
 
-const AdminDashboard = () => {
+const getSalesData = async () => {
+    const data = await db.order.aggregate({
+        _sum: { pricePaidInCent: true },
+        _count: true,
+    });
+    return {
+        amount: (data._sum.pricePaidInCent || 0) / 100,
+        numberOfSales: data._count,
+    };
+};
+
+const AdminDashboard = async () => {
+    const salesData = await getSalesData();
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            <DashboardCard title="sales" subtitle="test" body="body" />
+            <DashboardCard
+                title="sales"
+                subtitle={formatNumber(salesData.numberOfSales)}
+                body={formatCurrency(salesData.amount)}
+            />
         </div>
     );
 };
