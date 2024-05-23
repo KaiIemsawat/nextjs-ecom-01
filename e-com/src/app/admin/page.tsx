@@ -49,10 +49,19 @@ const getUserData = async () => {
     };
 };
 
+const getProductData = async () => {
+    const [activeCount, inactiveCount] = await Promise.all([
+        db.product.count({ where: { isAvailableForPurchese: true } }),
+        db.product.count({ where: { isAvailableForPurchese: false } }),
+    ]);
+    return { activeCount, inactiveCount };
+};
+
 const AdminDashboard = async () => {
-    const [salesData, userData] = await Promise.all([
+    const [salesData, userData, productData] = await Promise.all([
         getSalesData(),
         getUserData(),
+        getProductData(),
     ]);
 
     return (
@@ -68,6 +77,11 @@ const AdminDashboard = async () => {
                     userData.averageValuePerUser
                 )} Average Value`}
                 body={formatNumber(userData.userCount)}
+            />
+            <DashboardCard
+                title="Active Products"
+                subtitle={`${formatNumber(productData.inactiveCount)} Inactive`}
+                body={formatNumber(productData.activeCount)}
             />
         </div>
     );
