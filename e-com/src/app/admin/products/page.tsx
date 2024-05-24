@@ -1,7 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { PageHeader } from "../_components/pageHeader";
 import Link from "next/link";
-import { Table, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+    Table,
+    TableBody,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
 
 const page = () => {
     return (
@@ -34,6 +40,7 @@ const ProductsTable = () => {
                     </TableHead>
                 </TableRow>
             </TableHeader>
+            <TableBody></TableBody>
         </Table>
     );
 };
