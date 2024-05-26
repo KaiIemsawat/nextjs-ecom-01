@@ -19,20 +19,6 @@ const getSalesData = async () => {
     };
 };
 
-// const getUserData = async () => {
-//     const userCount = await db.user.count();
-//     const orderData = await db.order.aggregate({
-//         _sum: { pricePaidInCents: true },
-//     });
-//     return {
-//         userCount,
-//         averageValuePerUser:
-//             userCount === 0
-//                 ? 0
-//                 : (orderData._sum.pricePaidInCent || 0) / userCount / 100,
-//     };
-// };
-// * Switch to below block of code so we don't need 2 awaits
 const getUserData = async () => {
     const [userCount, orderData] = await Promise.all([
         db.user.count(),
@@ -51,9 +37,10 @@ const getUserData = async () => {
 
 const getProductData = async () => {
     const [activeCount, inactiveCount] = await Promise.all([
-        db.product.count({ where: { isAvailableForPurchese: true } }),
-        db.product.count({ where: { isAvailableForPurchese: false } }),
+        db.product.count({ where: { isAvailableForPurchase: true } }),
+        db.product.count({ where: { isAvailableForPurchase: false } }),
     ]);
+
     return { activeCount, inactiveCount };
 };
 

@@ -4,11 +4,24 @@ import Link from "next/link";
 import {
     Table,
     TableBody,
+    TableCell,
     TableHead,
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
 import db from "@/db/db";
+import { CheckCircle2, MoreVertical, XCircle } from "lucide-react";
+import { formatCurrency, formatNumber } from "@/lib/formatters";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+    ActiveToggleDropdownItem,
+    DeleteDropdownItem,
+} from "./_components/ProductActions";
 
 const page = () => {
     return (
@@ -31,11 +44,15 @@ const ProductsTable = async () => {
             id: true,
             name: true,
             priceInCents: true,
-            isAvailableForPurchese: true,
+            isAvailableForPurchase: true,
             _count: { select: { orders: true } },
         },
         orderBy: { name: "asc" },
     });
+
+    if (products.length === 0) {
+        return <p>No product found</p>;
+    }
 
     return (
         <Table>
@@ -52,7 +69,68 @@ const ProductsTable = async () => {
                     </TableHead>
                 </TableRow>
             </TableHeader>
-            <TableBody></TableBody>
+            <TableBody>
+                {products.map((product) => (
+                    <TableRow key={product.id}>
+                        <TableCell>
+                            {product.isAvailableForPurchase ? (
+                                <>
+                                    <span className="sr-only">Available</span>
+                                    <CheckCircle2 />
+                                </>
+                            ) : (
+                                <>
+                                    <span className="sr-only">Unavailable</span>
+
+                                    <XCircle />
+                                </>
+                            )}
+                        </TableCell>
+                        <TableCell>{product.name}</TableCell>
+                        <TableCell>
+                            {formatCurrency(product.priceInCents / 100)}
+                        </TableCell>
+                        <TableCell>
+                            {formatNumber(product._count.orders)}
+                        </TableCell>
+                        <TableCell>
+                            <DropdownMenu>
+                                <DropdownMenuTrigger>
+                                    <MoreVertical />
+                                    <span className="sr-only">Action</span>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent>
+                                    <DropdownMenuItem asChild>
+                                        <a
+                                            download
+                                            href={`/admin/products/${product.id}/download`}
+                                        >
+                                            Download
+                                        </a>
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem asChild>
+                                        <Link
+                                            href={`/admin/products/${product.id}/edit`}
+                                        >
+                                            Edit
+                                        </Link>
+                                    </DropdownMenuItem>
+                                    <ActiveToggleDropdownItem
+                                        id={product.id}
+                                        isAvailableForPurchase={
+                                            product.isAvailableForPurchase
+                                        }
+                                    />
+                                    <DeleteDropdownItem
+                                        id={product.id}
+                                        disabled={product._count.orders > 0}
+                                    />
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+                        </TableCell>
+                    </TableRow>
+                ))}
+            </TableBody>
         </Table>
     );
 };
