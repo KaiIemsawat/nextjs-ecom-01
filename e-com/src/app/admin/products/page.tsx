@@ -8,6 +8,7 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
+import db from "@/db/db";
 
 const page = () => {
     return (
@@ -24,7 +25,18 @@ const page = () => {
 };
 export default page;
 
-const ProductsTable = () => {
+const ProductsTable = async () => {
+    const products = await db.product.findMany({
+        select: {
+            id: true,
+            name: true,
+            priceInCents: true,
+            isAvailableForPurchese: true,
+            _count: { select: { orders: true } },
+        },
+        orderBy: { name: "asc" },
+    });
+
     return (
         <Table>
             <TableHeader>
