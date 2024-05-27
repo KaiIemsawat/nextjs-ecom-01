@@ -77,13 +77,13 @@ const ProductsTable = async () => {
                             {product.isAvailableForPurchase ? (
                                 <>
                                     <span className="sr-only">Available</span>
-                                    <CheckCircle2 />
+                                    <CheckCircle2 className="stroke-lime-600" />
                                 </>
                             ) : (
                                 <>
                                     <span className="sr-only">Unavailable</span>
 
-                                    <XCircle className="stroke-destructive" />
+                                    <XCircle className="stroke-orange-500" />
                                 </>
                             )}
                         </TableCell>

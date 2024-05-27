@@ -30,6 +30,9 @@ export const ActiveToggleDropdownItem = ({
                     router.refresh();
                 });
             }}
+            className={
+                isAvailableForPurchase ? "text-orange-500" : "text-lime-600"
+            }
         >
             {isAvailableForPurchase ? "Deactivate" : "Activate"}
         </DropdownMenuItem>
