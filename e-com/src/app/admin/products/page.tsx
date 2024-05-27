@@ -83,7 +83,7 @@ const ProductsTable = async () => {
                                 <>
                                     <span className="sr-only">Unavailable</span>
 
-                                    <XCircle />
+                                    <XCircle className="stroke-destructive" />
                                 </>
                             )}
                         </TableCell>
