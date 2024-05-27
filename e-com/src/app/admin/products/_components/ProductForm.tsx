@@ -8,8 +8,9 @@ import { formatCurrency } from "@/lib/formatters";
 import { useState } from "react";
 import { addProduct } from "../../_actions/products";
 import { useFormState, useFormStatus } from "react-dom";
+import { Product } from "@prisma/client";
 
-const ProductForm = () => {
+const ProductForm = ({ product }: { product?: Product | null }) => {
     const [error, action] = useFormState(addProduct, {});
 
     const [priceInCents, setPriceInCents] = useState<number>();
