@@ -38,7 +38,6 @@ const stripePromise = loadStripe(
 );
 
 export const CheckoutForm = ({ product, clientSecret }: CheckoutFormProps) => {
-    console.log(product);
     return (
         <div className="max-w-5xl w-full mx-auto space-y-8">
             <div className="flex gap-4 items-center">
@@ -130,7 +129,7 @@ const Form = ({
                     <CardTitle>Checkout</CardTitle>
                     {errorMessage && (
                         <CardDescription className="text-destructive">
-                            Error
+                            {errorMessage}
                         </CardDescription>
                     )}
                 </CardHeader>
